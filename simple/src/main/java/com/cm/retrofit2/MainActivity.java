@@ -32,6 +32,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
 
+        download();
+    }
+
+    private void download() {
         String url = "1f178a82b9014a90b04cc438ae773912b21beec1.jpg";
 
         DownloadService downloadService = ServiceGenerator.createResponseService(DownloadService.class,this);
