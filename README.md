@@ -1,6 +1,6 @@
 # converter-file
 
-自定义FileConverterFactory实现在使用Retrofit下载文件的时候讲ResponseBody内容保存到指定文件路径,详细可以看这篇博客:
+自定义FileConverterFactory实现在使用Retrofit下载文件的时候将ResponseBody内容保存到指定文件路径,详细可以看这篇博客:
 [FileConverterFactory实现Retrofit下载文件直接返回File](http://www.loongwind.com/archives/296.html)
 
 
