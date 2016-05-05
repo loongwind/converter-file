@@ -3,6 +3,7 @@ package com.cm.retrofit2.converter.file.body;
 import com.cm.retrofit2.converter.file.FileConverter;
 
 import java.io.IOException;
+import java.util.List;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -49,10 +50,13 @@ public class HttpClientHelper {
                 //拦截
                 Response originalResponse = chain.proceed(request);
 
+                List<String> segments = request.url().pathSegments();
+                String filename = segments.get(segments.size()-1);
+
                 ProgressResponseBody body = new ProgressResponseBody(originalResponse.body(), progressListener);
                 //从request中取出对应的header即我们设置的文件保存地址,然后保存到我们自定义的response中
                 body.setSavePath(request.header(FileConverter.SAVE_PATH));
-
+                body.setFileName(filename);
                 //包装响应体并返回
                 return originalResponse.newBuilder()
                         .body(body)

@@ -35,6 +35,11 @@ public class ProgressResponseBody extends ResponseBody {
     private String savePath;
 
     /**
+     * 下载文件名
+     */
+    private String fileName;
+
+    /**
      * 构造函数，赋值
      *
      * @param responseBody     待包装的响应体
@@ -126,5 +131,13 @@ public class ProgressResponseBody extends ResponseBody {
 
     public void setSavePath(String savePath) {
         this.savePath = savePath;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }

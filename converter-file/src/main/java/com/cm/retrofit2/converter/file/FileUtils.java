@@ -1,7 +1,5 @@
 package com.cm.retrofit2.converter.file;
 
-import android.os.Environment;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -22,11 +20,6 @@ public class FileUtils {
      * @return 保存file
      */
     public static File writeResponseBodyToDisk(ResponseBody body, String path) {
-
-        //如果path路径为空则保存到下面路径
-        if(path == null){
-            path = Environment.getDownloadCacheDirectory().getAbsolutePath() + File.separator+System.currentTimeMillis()+".bat";
-        }
 
         File futureStudioIconFile = null;
         try {

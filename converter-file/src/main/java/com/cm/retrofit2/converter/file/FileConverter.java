@@ -1,5 +1,9 @@
 package com.cm.retrofit2.converter.file;
 
+import android.os.Environment;
+import android.support.annotation.Nullable;
+import android.text.TextUtils;
+
 import com.cm.retrofit2.converter.file.body.ProgressResponseBody;
 
 import java.io.File;
@@ -23,7 +27,14 @@ public class FileConverter implements Converter<ResponseBody, File> {
 
     @Override
     public File convert(ResponseBody value) throws IOException {
+        String saveFilePath = getSaveFilePath(value);
+        return FileUtils.writeResponseBodyToDisk(value, saveFilePath);
+    }
+
+    @Nullable
+    private String getSaveFilePath(ResponseBody value) {
         String saveFilePath = null;
+        String requestFileName = null;
         try {
 
             //使用反射获得我们自定义的response
@@ -32,14 +43,36 @@ public class FileConverter implements Converter<ResponseBody, File> {
             field.setAccessible(true);
             ResponseBody body = (ResponseBody) field.get(value);
             if(body instanceof ProgressResponseBody){
-                saveFilePath = ((ProgressResponseBody)body).getSavePath();
+                ProgressResponseBody prBody = ((ProgressResponseBody)body);
+                saveFilePath = prBody.getSavePath();
+                requestFileName = prBody.getFileName();
             }
+
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
 
-        return FileUtils.writeResponseBodyToDisk(value, saveFilePath);
+
+        //请求的文件名为空则根据时间戳生成一个临时文件名
+        if(TextUtils.isEmpty(requestFileName)){
+            requestFileName = System.currentTimeMillis()+".tmp";
+        }
+
+        //如果保存路径是一个文件夹,则在后面加上请求文件名
+        if(!TextUtils.isEmpty(saveFilePath)){
+            File file = new File(saveFilePath);
+            if(file.isDirectory()){
+                saveFilePath = saveFilePath+File.separator+requestFileName;
+            }
+        }
+
+        //如果保存路径为null则设置默认保存到sdcard根目录
+        if(TextUtils.isEmpty(saveFilePath)){
+            saveFilePath = Environment.getExternalStorageDirectory().getAbsolutePath()+ File.separator+requestFileName;
+        }
+
+        return saveFilePath;
     }
 }
