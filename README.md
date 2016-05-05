@@ -7,18 +7,18 @@
 ###使用:
 
 ####1. 在Module的build.gradle中添加
-```
+```gradle
 compile 'com.cm.retrofit2:converter-file:1.0.1'
 ```
 
 ####2. APIService中方法里添加`@Header(FileConverter.SAVE_PATH)`
-```
+```java
 @GET
 Call<File> download(@Url String fileUrl, @Header(FileConverter.SAVE_PATH) String path);
 ```
 
 ####3. 设置Retrofit
-```
+```java
 private static Retrofit.Builder builder = new Retrofit.Builder()
         .baseUrl(HOST)
         .addConverterFactory(FileConverterFactory.create()); //添加FileConverterFactory
@@ -39,7 +39,7 @@ public static <T> T createResponseService(Class<T> tClass, ProgressResponseListe
 ```
 
 ####4. 使用
-```
+```java
 private void download() {
     String url = "test.jpg";
 
