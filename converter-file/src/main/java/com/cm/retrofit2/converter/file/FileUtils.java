@@ -21,10 +21,12 @@ public class FileUtils {
      */
     public static File writeResponseBodyToDisk(ResponseBody body, String path) {
 
-        File futureStudioIconFile = null;
+        File saveFile = null;
         try {
 
-            futureStudioIconFile = new File(path);
+            saveFile = new File(path);
+
+            createDirs(saveFile);
 
             InputStream inputStream = null;
             OutputStream outputStream = null;
@@ -33,7 +35,7 @@ public class FileUtils {
                 byte[] fileReader = new byte[4096];
 
                 inputStream = body.byteStream();
-                outputStream = new FileOutputStream(futureStudioIconFile);
+                outputStream = new FileOutputStream(saveFile);
 
                 while (true) {
                     int read = inputStream.read(fileReader);
@@ -48,9 +50,9 @@ public class FileUtils {
 
                 outputStream.flush();
 
-                return futureStudioIconFile;
+                return saveFile;
             } catch (IOException e) {
-                return futureStudioIconFile;
+                return saveFile;
             } finally {
                 if (inputStream != null) {
                     inputStream.close();
@@ -61,7 +63,21 @@ public class FileUtils {
                 }
             }
         } catch (IOException e) {
-            return futureStudioIconFile;
+            return saveFile;
+        }
+    }
+
+    public static void createDirs(File file){
+        if(file != null){
+            String dir = file.getParent();
+            createDirs(dir);
+        }
+    }
+
+    public static void createDirs(String dirPath){
+        File file = new File(dirPath);
+        if(!file.exists()){
+            file.mkdirs();
         }
     }
 }
